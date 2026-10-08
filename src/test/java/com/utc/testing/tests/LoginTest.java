@@ -14,6 +14,7 @@ class LoginTest extends BaseTest {
     private static final String SAMPLE_USERNAME = "huongnt";
     private static final String SAMPLE_PASSWORD = "123456";
     private static final String WRONG_PASSWORD = "utc@235";
+    private static final String INVALID_USERNAME = "huongnguyenvien";
 
     @Test
     @DisplayName("TC1 - Không đăng nhập khi để trống tên đăng nhập và mật khẩu")
@@ -78,6 +79,25 @@ class LoginTest extends BaseTest {
                 "Hệ thống không được xác thực khi mật khẩu sai.");
         assertFalse(feedback.isBlank(),
                 "Không tìm thấy thông báo sau khi đăng nhập bằng mật khẩu sai.");
+        assertTrue(loginPage.isInvalidCredentialsMessage(feedback),
+                () -> "Thông báo chưa thể hiện thông tin đăng nhập không đúng. Phản hồi thực tế: " + feedback);
+    }
+
+    @Test
+    @DisplayName("TC5 - Không đăng nhập khi tên đăng nhập sai và mật khẩu đúng")
+    void shouldRejectLoginWhenUsernameIsIncorrect() {
+        assumeTrue(validPassword != null && !validPassword.isBlank(),
+                "Bỏ qua TC5: chưa cấu hình biến môi trường UTC_PASSWORD.");
+
+        LoginPage loginPage = new LoginPage(driver, wait);
+        loginPage.open(baseUrl);
+
+        String feedback = loginPage.submitCredentialsAndGetFeedback(INVALID_USERNAME, validPassword);
+
+        assertTrue(loginPage.isStillOnLoginPage(),
+                "Hệ thống không được xác thực khi username sai.");
+        assertFalse(feedback.isBlank(),
+                "Không tìm thấy thông báo sau khi đăng nhập bằng username sai.");
         assertTrue(loginPage.isInvalidCredentialsMessage(feedback),
                 () -> "Thông báo chưa thể hiện thông tin đăng nhập không đúng. Phản hồi thực tế: " + feedback);
     }

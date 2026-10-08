@@ -17,6 +17,7 @@ public abstract class BaseTest {
     protected WebDriverWait wait;
     protected String baseUrl;
     protected String validUsername;
+    protected String validPassword;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -37,6 +38,7 @@ public abstract class BaseTest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         baseUrl = config.getProperty("base.url");
         validUsername = System.getenv("UTC_USERNAME");
+        validPassword = System.getenv("UTC_PASSWORD");
     }
 
     @AfterEach
