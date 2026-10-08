@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -18,6 +19,7 @@ public class LoginPage {
     private static final By USERNAME = By.name("username");
     private static final By PASSWORD = By.name("userpwd");
     private static final By LOGIN_BUTTON = By.cssSelector("input.submit_login[type='submit']");
+    private static final By REMEMBER_ME = By.id("persistent");
 
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -67,6 +69,17 @@ public class LoginPage {
     public boolean isStillOnLoginPage() {
         return driver.findElements(USERNAME).size() == 1
                 && driver.findElements(PASSWORD).size() == 1;
+    }
+
+    public boolean isRememberMeSelected() {
+        return driver.findElement(REMEMBER_ME).isSelected();
+    }
+
+    public void selectRememberMe() {
+        WebElement checkbox = wait.until(ExpectedConditions.presenceOfElementLocated(REMEMBER_ME));
+        if (!checkbox.isSelected()) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", checkbox);
+        }
     }
 
     public boolean isRequiredCredentialsMessage(String feedback) {

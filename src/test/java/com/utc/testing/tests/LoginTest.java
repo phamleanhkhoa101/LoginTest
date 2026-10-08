@@ -104,6 +104,21 @@ class LoginTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("TC8 - Chọn Giữ tôi luôn đăng nhập")
+    void shouldSelectRememberMeCheckbox() {
+        LoginPage loginPage = new LoginPage(driver, wait);
+        loginPage.open(baseUrl);
+
+        assertFalse(loginPage.isRememberMeSelected(),
+                "Checkbox Ghi nhớ phải ở trạng thái bỏ chọn khi mở trang.");
+
+        loginPage.selectRememberMe();
+
+        assertTrue(loginPage.isRememberMeSelected(),
+                "Checkbox Ghi nhớ phải chuyển sang trạng thái được chọn.");
+    }
+
+    @Test
     @DisplayName("TC6 - Không đăng nhập khi tên đăng nhập và mật khẩu đều sai")
     void shouldRejectLoginWhenUsernameAndPasswordAreIncorrect() {
         LoginPage loginPage = new LoginPage(driver, wait);
