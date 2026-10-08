@@ -147,6 +147,21 @@ class LoginTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("TC11 - Đăng nhập bằng phím Enter")
+    void shouldSubmitLoginWithEnter() {
+        assumeTrue(validUsername != null && !validUsername.isBlank()
+                        && validPassword != null && !validPassword.isBlank(),
+                "Bỏ qua TC11: chưa cấu hình UTC_USERNAME và UTC_PASSWORD.");
+
+        LoginPage loginPage = new LoginPage(driver, wait);
+        loginPage.open(baseUrl);
+        loginPage.submitCredentialsWithEnter(validUsername, validPassword);
+
+        assertFalse(loginPage.isStillOnLoginPage(),
+                "Sau khi nhấn Enter, trang không được tiếp tục hiển thị form đăng nhập.");
+    }
+
+    @Test
     @DisplayName("TC6 - Không đăng nhập khi tên đăng nhập và mật khẩu đều sai")
     void shouldRejectLoginWhenUsernameAndPasswordAreIncorrect() {
         LoginPage loginPage = new LoginPage(driver, wait);

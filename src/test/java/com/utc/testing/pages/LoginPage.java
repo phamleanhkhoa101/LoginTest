@@ -2,6 +2,7 @@ package com.utc.testing.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -58,6 +59,13 @@ public class LoginPage {
         driver.findElement(USERNAME).sendKeys(username);
         driver.findElement(PASSWORD).sendKeys(password);
         return submitAndGetFeedback();
+    }
+
+    public void submitCredentialsWithEnter(String username, String password) {
+        driver.findElement(USERNAME).sendKeys(username);
+        WebElement passwordInput = driver.findElement(PASSWORD);
+        passwordInput.sendKeys(password, Keys.ENTER);
+        wait.until(currentDriver -> !isStillOnLoginPage());
     }
 
     private String submitAndGetFeedback() {
