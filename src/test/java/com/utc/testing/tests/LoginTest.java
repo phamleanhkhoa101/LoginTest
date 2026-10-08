@@ -135,6 +135,18 @@ class LoginTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("TC10 - Mật khẩu được che khi nhập")
+    void shouldMaskPasswordInput() {
+        LoginPage loginPage = new LoginPage(driver, wait);
+        loginPage.open(baseUrl);
+
+        loginPage.enterPassword(SAMPLE_PASSWORD);
+
+        assertTrue(loginPage.isPasswordMasked(),
+                "Ô password phải dùng type=password để che ký tự khi nhập.");
+    }
+
+    @Test
     @DisplayName("TC6 - Không đăng nhập khi tên đăng nhập và mật khẩu đều sai")
     void shouldRejectLoginWhenUsernameAndPasswordAreIncorrect() {
         LoginPage loginPage = new LoginPage(driver, wait);

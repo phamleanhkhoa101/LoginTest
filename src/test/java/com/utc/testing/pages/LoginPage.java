@@ -45,6 +45,10 @@ public class LoginPage {
         return submitAndGetFeedback();
     }
 
+    public void enterPassword(String password) {
+        driver.findElement(PASSWORD).sendKeys(password);
+    }
+
     public String submitWithBlankPasswordAndGetFeedback(String username) {
         driver.findElement(USERNAME).sendKeys(username);
         return submitAndGetFeedback();
@@ -69,6 +73,10 @@ public class LoginPage {
     public boolean isStillOnLoginPage() {
         return driver.findElements(USERNAME).size() == 1
                 && driver.findElements(PASSWORD).size() == 1;
+    }
+
+    public boolean isPasswordMasked() {
+        return "password".equalsIgnoreCase(driver.findElement(PASSWORD).getAttribute("type"));
     }
 
     public boolean isRememberMeSelected() {
