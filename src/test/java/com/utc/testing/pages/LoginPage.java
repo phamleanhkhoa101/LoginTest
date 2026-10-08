@@ -21,6 +21,8 @@ public class LoginPage {
     private static final By PASSWORD = By.name("userpwd");
     private static final By LOGIN_BUTTON = By.cssSelector("input.submit_login[type='submit']");
     private static final By REMEMBER_ME = By.id("persistent");
+    private static final By FORGOT_PASSWORD_LINK = By.partialLinkText("Bạn quên mật khẩu");
+    private static final By BACK_TO_LOGIN_LINK = By.partialLinkText("Trở lại đăng nhập");
 
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -85,6 +87,15 @@ public class LoginPage {
 
     public boolean isPasswordMasked() {
         return "password".equalsIgnoreCase(driver.findElement(PASSWORD).getAttribute("type"));
+    }
+
+    public void openForgotPasswordPage() {
+        driver.findElement(FORGOT_PASSWORD_LINK).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(BACK_TO_LOGIN_LINK));
+    }
+
+    public boolean isForgotPasswordPageVisible() {
+        return driver.findElements(BACK_TO_LOGIN_LINK).stream().anyMatch(WebElement::isDisplayed);
     }
 
     public boolean isRememberMeSelected() {

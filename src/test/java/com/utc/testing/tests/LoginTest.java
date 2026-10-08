@@ -162,6 +162,18 @@ class LoginTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("TC12 - Mở quy trình Quên mật khẩu")
+    void shouldOpenForgotPasswordPage() {
+        LoginPage loginPage = new LoginPage(driver, wait);
+        loginPage.open(baseUrl);
+
+        loginPage.openForgotPasswordPage();
+
+        assertTrue(loginPage.isForgotPasswordPageVisible(),
+                "Trang khôi phục mật khẩu phải hiển thị liên kết Trở lại đăng nhập.");
+    }
+
+    @Test
     @DisplayName("TC6 - Không đăng nhập khi tên đăng nhập và mật khẩu đều sai")
     void shouldRejectLoginWhenUsernameAndPasswordAreIncorrect() {
         LoginPage loginPage = new LoginPage(driver, wait);
