@@ -48,6 +48,12 @@ public class LoginPage {
         return submitAndGetFeedback();
     }
 
+    public String submitCredentialsAndGetFeedback(String username, String password) {
+        driver.findElement(USERNAME).sendKeys(username);
+        driver.findElement(PASSWORD).sendKeys(password);
+        return submitAndGetFeedback();
+    }
+
     private String submitAndGetFeedback() {
         String textBeforeSubmit = driver.findElement(By.tagName("body")).getText();
         driver.findElement(LOGIN_BUTTON).click();
@@ -107,6 +113,22 @@ public class LoginPage {
                 || normalized.contains("password")
                 || normalized.contains("this field");
         return asksForInput && mentionsPassword;
+    }
+
+    public boolean isInvalidCredentialsMessage(String feedback) {
+        String normalized = feedback.toLowerCase(Locale.ROOT);
+        boolean reportsFailure = normalized.contains("không đúng")
+                || normalized.contains("không chính xác")
+                || normalized.contains("sai")
+                || normalized.contains("thất bại")
+                || normalized.contains("invalid")
+                || normalized.contains("incorrect");
+        boolean mentionsCredentials = normalized.contains("tài khoản")
+                || normalized.contains("đăng nhập")
+                || normalized.contains("username")
+                || normalized.contains("mật khẩu")
+                || normalized.contains("password");
+        return reportsFailure && mentionsCredentials;
     }
 
     private String readValidationFeedback(String textBeforeSubmit) {

@@ -7,11 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class LoginTest extends BaseTest {
 
     private static final String SAMPLE_USERNAME = "huongnt";
     private static final String SAMPLE_PASSWORD = "123456";
+    private static final String WRONG_PASSWORD = "utc@235";
 
     @Test
     @DisplayName("TC1 - Không đăng nhập khi để trống tên đăng nhập và mật khẩu")
@@ -59,5 +61,24 @@ class LoginTest extends BaseTest {
                 "Không tìm thấy thông báo sau khi gửi form với password trống.");
         assertTrue(loginPage.isMissingPasswordMessage(feedback),
                 () -> "Thông báo chưa yêu cầu nhập mật khẩu. Phản hồi thực tế: " + feedback);
+    }
+
+    @Test
+    @DisplayName("TC4 - Không đăng nhập khi tên đăng nhập đúng và mật khẩu sai")
+    void shouldRejectLoginWhenPasswordIsIncorrect() {
+        assumeTrue(validUsername != null && !validUsername.isBlank(),
+                "Bỏ qua TC4: chưa cấu hình biến môi trường UTC_USERNAME.");
+
+        LoginPage loginPage = new LoginPage(driver, wait);
+        loginPage.open(baseUrl);
+
+        String feedback = loginPage.submitCredentialsAndGetFeedback(validUsername, WRONG_PASSWORD);
+
+        assertTrue(loginPage.isStillOnLoginPage(),
+                "Hệ thống không được xác thực khi mật khẩu sai.");
+        assertFalse(feedback.isBlank(),
+                "Không tìm thấy thông báo sau khi đăng nhập bằng mật khẩu sai.");
+        assertTrue(loginPage.isInvalidCredentialsMessage(feedback),
+                () -> "Thông báo chưa thể hiện thông tin đăng nhập không đúng. Phản hồi thực tế: " + feedback);
     }
 }

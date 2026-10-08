@@ -16,6 +16,7 @@ public abstract class BaseTest {
     protected WebDriver driver;
     protected WebDriverWait wait;
     protected String baseUrl;
+    protected String validUsername;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -35,6 +36,7 @@ public abstract class BaseTest {
         driver = new ChromeDriver(options); // Selenium Manager tự quản lý ChromeDriver.
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         baseUrl = config.getProperty("base.url");
+        validUsername = System.getenv("UTC_USERNAME");
     }
 
     @AfterEach
