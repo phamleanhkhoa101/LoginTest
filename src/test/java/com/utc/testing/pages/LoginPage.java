@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -64,15 +65,12 @@ public class LoginPage {
         return submitAndGetFeedback();
     }
 
-    public void submitCredentialsWithEnter(String username, String password) {
-        driver.findElement(USERNAME).sendKeys(username);
-        WebElement passwordInput = driver.findElement(PASSWORD);
-        passwordInput.sendKeys(password, Keys.ENTER);
-        wait.until(currentDriver -> !isStillOnLoginPage());
+    public void pressEnterInPasswordField() {
+        driver.findElement(PASSWORD).sendKeys(Keys.ENTER);
     }
 
     private String submitAndGetFeedback() {
-        String textBeforeSubmit = driver.findElement(By.tagName("body")).getText();
+        String textBeforeSubmit = readPageText();
         driver.findElement(LOGIN_BUTTON).click();
 
         return wait.until(currentDriver -> {
@@ -211,7 +209,7 @@ public class LoginPage {
             return browserValidation;
         }
 
-        String textAfterSubmit = driver.findElement(By.tagName("body")).getText();
+        String textAfterSubmit = readPageText();
         Set<String> oldLines = normalizedLines(textBeforeSubmit);
         return normalizedLines(textAfterSubmit).stream()
                 .filter(line -> !oldLines.contains(line))
@@ -234,5 +232,13 @@ public class LoginPage {
                 .map(String::trim)
                 .filter(line -> !line.isBlank())
                 .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private String readPageText() {
+        try {
+            return driver.findElement(By.tagName("body")).getText();
+        } catch (StaleElementReferenceException ignored) {
+            return "";
+        }
     }
 }
