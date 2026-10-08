@@ -16,6 +16,7 @@ class LoginTest extends BaseTest {
     private static final String WRONG_PASSWORD = "utc@235";
     private static final String INVALID_USERNAME = "huongnguyenvien";
     private static final String INVALID_USERNAME_AND_PASSWORD = "abcxyz";
+    private static final String WHITESPACE_USERNAME = "   ";
 
     @Test
     @DisplayName("TC1 - Không đăng nhập khi để trống tên đăng nhập và mật khẩu")
@@ -183,6 +184,23 @@ class LoginTest extends BaseTest {
 
         assertTrue(loginPage.isGoogleAccountsLoginPage(),
                 "Liên kết phải điều hướng tới cơ chế đăng nhập Google Accounts của UTC.");
+    }
+
+    @Test
+    @DisplayName("TC14 - Không đăng nhập với username toàn dấu cách")
+    void shouldRejectWhitespaceOnlyUsername() {
+        LoginPage loginPage = new LoginPage(driver, wait);
+        loginPage.open(baseUrl);
+
+        String feedback = loginPage.submitCredentialsAndGetFeedback(
+                WHITESPACE_USERNAME, SAMPLE_PASSWORD);
+
+        assertTrue(loginPage.isStillOnLoginPage(),
+                "Hệ thống không được xác thực với username chỉ gồm dấu cách.");
+        assertFalse(feedback.isBlank(),
+                "Không tìm thấy phản hồi khi username chỉ gồm dấu cách.");
+        assertTrue(loginPage.isWhitespaceUsernameRejected(feedback),
+                () -> "Username toàn dấu cách chưa được xử lý đúng. Phản hồi thực tế: " + feedback);
     }
 
     @Test

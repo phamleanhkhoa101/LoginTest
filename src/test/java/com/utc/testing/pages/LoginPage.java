@@ -189,6 +189,10 @@ public class LoginPage {
         return reportsFailure && mentionsCredentials;
     }
 
+    public boolean isWhitespaceUsernameRejected(String feedback) {
+        return isMissingUsernameMessage(feedback) || isInvalidCredentialsMessage(feedback);
+    }
+
     private String readValidationFeedback(String textBeforeSubmit) {
         String alertText = readAlertText();
         if (!alertText.isBlank()) {
