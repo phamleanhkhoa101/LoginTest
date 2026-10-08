@@ -23,6 +23,7 @@ public class LoginPage {
     private static final By REMEMBER_ME = By.id("persistent");
     private static final By FORGOT_PASSWORD_LINK = By.partialLinkText("Bạn quên mật khẩu");
     private static final By BACK_TO_LOGIN_LINK = By.partialLinkText("Trở lại đăng nhập");
+    private static final By UTC_EMAIL_LOGIN_LINK = By.partialLinkText("Đăng nhập bằng e-mail UTC");
 
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -96,6 +97,16 @@ public class LoginPage {
 
     public boolean isForgotPasswordPageVisible() {
         return driver.findElements(BACK_TO_LOGIN_LINK).stream().anyMatch(WebElement::isDisplayed);
+    }
+
+    public void openUtcEmailLogin() {
+        String loginUrl = driver.getCurrentUrl();
+        driver.findElement(UTC_EMAIL_LOGIN_LINK).click();
+        wait.until(currentDriver -> !currentDriver.getCurrentUrl().equals(loginUrl));
+    }
+
+    public boolean isGoogleAccountsLoginPage() {
+        return driver.getCurrentUrl().contains("accounts.google.com");
     }
 
     public boolean isRememberMeSelected() {

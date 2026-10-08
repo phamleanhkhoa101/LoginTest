@@ -174,6 +174,18 @@ class LoginTest extends BaseTest {
     }
 
     @Test
+    @DisplayName("TC13 - Mở đăng nhập bằng e-mail UTC")
+    void shouldOpenUtcEmailLogin() {
+        LoginPage loginPage = new LoginPage(driver, wait);
+        loginPage.open(baseUrl);
+
+        loginPage.openUtcEmailLogin();
+
+        assertTrue(loginPage.isGoogleAccountsLoginPage(),
+                "Liên kết phải điều hướng tới cơ chế đăng nhập Google Accounts của UTC.");
+    }
+
+    @Test
     @DisplayName("TC6 - Không đăng nhập khi tên đăng nhập và mật khẩu đều sai")
     void shouldRejectLoginWhenUsernameAndPasswordAreIncorrect() {
         LoginPage loginPage = new LoginPage(driver, wait);
