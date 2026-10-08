@@ -82,6 +82,13 @@ public class LoginPage {
         }
     }
 
+    public void deselectRememberMe() {
+        WebElement checkbox = wait.until(ExpectedConditions.presenceOfElementLocated(REMEMBER_ME));
+        if (checkbox.isSelected()) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", checkbox);
+        }
+    }
+
     public boolean isRequiredCredentialsMessage(String feedback) {
         String normalized = feedback.toLowerCase(Locale.ROOT);
         boolean asksForInput = normalized.contains("yêu cầu")
