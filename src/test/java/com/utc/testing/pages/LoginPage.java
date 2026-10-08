@@ -43,6 +43,11 @@ public class LoginPage {
         return submitAndGetFeedback();
     }
 
+    public String submitWithBlankPasswordAndGetFeedback(String username) {
+        driver.findElement(USERNAME).sendKeys(username);
+        return submitAndGetFeedback();
+    }
+
     private String submitAndGetFeedback() {
         String textBeforeSubmit = driver.findElement(By.tagName("body")).getText();
         driver.findElement(LOGIN_BUTTON).click();
@@ -88,6 +93,20 @@ public class LoginPage {
                 || normalized.contains("username")
                 || normalized.contains("this field");
         return asksForInput && mentionsUsername;
+    }
+
+    public boolean isMissingPasswordMessage(String feedback) {
+        String normalized = feedback.toLowerCase(Locale.ROOT);
+        boolean asksForInput = normalized.contains("yêu cầu")
+                || normalized.contains("vui lòng")
+                || normalized.contains("bắt buộc")
+                || normalized.contains("chưa nhập")
+                || normalized.contains("please fill")
+                || normalized.contains("required");
+        boolean mentionsPassword = normalized.contains("mật khẩu")
+                || normalized.contains("password")
+                || normalized.contains("this field");
+        return asksForInput && mentionsPassword;
     }
 
     private String readValidationFeedback(String textBeforeSubmit) {

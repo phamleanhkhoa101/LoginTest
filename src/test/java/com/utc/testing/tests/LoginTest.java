@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LoginTest extends BaseTest {
 
+    private static final String SAMPLE_USERNAME = "huongnt";
     private static final String SAMPLE_PASSWORD = "123456";
 
     @Test
@@ -42,5 +43,21 @@ class LoginTest extends BaseTest {
                 "Không tìm thấy thông báo sau khi gửi form với username trống.");
         assertTrue(loginPage.isMissingUsernameMessage(feedback),
                 () -> "Thông báo chưa yêu cầu nhập tên đăng nhập. Phản hồi thực tế: " + feedback);
+    }
+
+    @Test
+    @DisplayName("TC3 - Không đăng nhập khi để trống mật khẩu")
+    void shouldRejectLoginWhenPasswordIsEmpty() {
+        LoginPage loginPage = new LoginPage(driver, wait);
+        loginPage.open(baseUrl);
+
+        String feedback = loginPage.submitWithBlankPasswordAndGetFeedback(SAMPLE_USERNAME);
+
+        assertTrue(loginPage.isStillOnLoginPage(),
+                "Hệ thống không được xác thực khi password trống.");
+        assertFalse(feedback.isBlank(),
+                "Không tìm thấy thông báo sau khi gửi form với password trống.");
+        assertTrue(loginPage.isMissingPasswordMessage(feedback),
+                () -> "Thông báo chưa yêu cầu nhập mật khẩu. Phản hồi thực tế: " + feedback);
     }
 }
